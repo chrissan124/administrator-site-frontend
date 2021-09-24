@@ -1,27 +1,37 @@
 <template>
-  <a-form layout="horizontal" :model="formState" :rules="rules">
-    <a-form-item>
-      <a-input v-model:value="formState.email" placeholder="Email"> </a-input>
-    </a-form-item>
-    <a-form-item>
+  <a-form-model
+    layout="horizontal"
+    :model="formState"
+    ref="formRef"
+    :rules="rules"
+    style="width: 20rem"
+  >
+    <a-form-model-item ref="email" prop="email">
+      <a-input v-model="formState.email" placeholder="Email">
+        <a-icon slot="prefix" type="user" style="color: rgba(0, 0, 0, 0.25)" />
+      </a-input>
+    </a-form-model-item>
+    <a-form-model-item ref="password" prop="password">
       <a-input
-        v-model:value="formState.password"
+        v-model="formState.password"
         type="password"
         placeholder="Password"
       >
+        <a-icon slot="prefix" type="lock" style="color: rgba(0, 0, 0, 0.25)" />
       </a-input>
-    </a-form-item>
-    <a-form-item>
+    </a-form-model-item>
+    <div style="display: flex; align-items: center">
+      <a style="margin-right: auto">Forgot password?</a>
       <a-button
         type="primary"
+        style="width: 8rem"
         html-type="submit"
         @click="onSubmit"
-        :disabled="formState.email === '' || formState.password === ''"
       >
         Log in
       </a-button>
-    </a-form-item>
-  </a-form>
+    </div>
+  </a-form-model>
 </template>
 
 <script lang="ts">
@@ -34,17 +44,26 @@ import { Vue, Component } from 'vue-property-decorator'
 
 @Component
 export default class AuthLoginForm extends Vue {
-  formRef = { value: undefined }
+  //Function(callback: Function(boolean, object))
+  $refs!: {
+    formRef: HTMLFormElement
+  }
+
   formState: FormState = {
     email: '',
     password: '',
   }
   rules = {
-    name: [
+    email: [
       {
         required: true,
         message: 'Please input email',
         trigger: 'blur',
+      },
+      {
+        type: 'email',
+        trigger: 'blur',
+        message: 'Invalid email',
       },
     ],
     password: [
@@ -55,18 +74,14 @@ export default class AuthLoginForm extends Vue {
       },
     ],
   }
-
+  //Todo: proper login
   async onSubmit() {
-    /*
-    this.formRef.value
-      .validate()
-      .then(() => {
-        console.log('values', this.formState)
-      })
-      .catch((error: string) => {
-        console.log('error', error)
-      })
-      */
+    this.$refs.formRef.validate((valid: boolean) => {
+      if (valid) {
+        console.log(this.formState.email, this.formState.password)
+        this.$router.push('/')
+      }
+    })
   }
 }
 </script>

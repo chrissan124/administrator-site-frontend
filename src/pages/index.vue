@@ -1,5 +1,5 @@
 <template>
-  <AuthLogin />
+  <Tutorial />
 </template>
 
 <script lang="ts">
