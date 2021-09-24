@@ -1,0 +1,7 @@
+@mixin icon-hover {
+  cursor: pointer;
+  &:hover {
+    transition: color 0.3s;
+    color: #1890ff;
+  }
+}

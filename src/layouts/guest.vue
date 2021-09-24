@@ -7,7 +7,7 @@
 .background {
   height: 100vh;
   width: 100vw;
-  background: url('~assets/shape_background.jpg');
+  background: url('~assets/img/shape_background.jpg');
   background-size: contain;
 }
 </style>

@@ -22,7 +22,7 @@
         </p>
         <img
           class="logo"
-          src="~/assets/cacao/Logo_Cacao_ONLY_White.png"
+          src="~/assets/img/cacao/Logo_Cacao_ONLY_White.png"
           alt=""
         />
       </a-col>
@@ -43,7 +43,7 @@
 }
 .image {
   height: 100%;
-  background: url('~assets/login_photo.jpg');
+  background: url('~assets/img/login_photo.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position-y: center;

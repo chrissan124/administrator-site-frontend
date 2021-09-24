@@ -9,7 +9,7 @@
     >
       <img
         class="logo"
-        src="~/assets/cacao/Logo_Cacao_ONLY_White.png"
+        src="~/assets/img/cacao/Logo_Cacao_ONLY_White.png"
         alt="logo"
       />
       <a-menu mode="vertical" theme="dark" v-model:selectedKeys="selectedKeys">
@@ -72,18 +72,14 @@ export default class NavSideBar extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .trigger {
   font-size: 18px;
   line-height: 64px;
+  @include icon-hover;
   padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
 }
 
-.trigger:hover {
-  color: #1890ff;
-}
 .header {
   display: flex;
   align-items: center;
