@@ -27,6 +27,7 @@
         style="width: 8rem"
         html-type="submit"
         @click="onSubmit"
+        :loading="loading"
       >
         Log in
       </a-button>
@@ -39,7 +40,7 @@ interface FormState {
   email: string
   password: string
 }
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
 //import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 @Component
@@ -48,7 +49,8 @@ export default class AuthLoginForm extends Vue {
   $refs!: {
     formRef: HTMLFormElement
   }
-
+  loading = false
+  error = ''
   formState: FormState = {
     email: '',
     password: '',
@@ -78,8 +80,37 @@ export default class AuthLoginForm extends Vue {
   async onSubmit() {
     this.$refs.formRef.validate((valid: boolean) => {
       if (valid) {
-        console.log(this.formState.email, this.formState.password)
-        this.$router.push('/')
+        this.loading = true
+
+        this.$auth
+          .loginWith('local', {
+            data: {
+              email: this.formState.email,
+              password: this.formState.password,
+            },
+          })
+          .then((response) => {
+            /*if (response && response.status === 200) {
+              const user = response.data
+              this.$auth.setUser({
+                id: user.userId,
+                roleId: user.Role.roleId,
+                permissions: user.Role.Permissions,
+              })
+            }*/
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 401) {
+              this.error = 'Invalid credentials'
+            } else {
+              this.error = 'An unknown server error has occurred'
+            }
+            console.log(error)
+            this.$message.error(this.error)
+          })
+          .finally(() => {
+            this.loading = false
+          })
       }
     })
   }

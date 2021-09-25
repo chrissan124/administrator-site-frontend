@@ -6,6 +6,7 @@
       collapsed-width="80"
       :trigger="null"
       collapsible
+      style="display: flex; flex-direction: column; align-items: center"
     >
       <img
         class="logo"
@@ -13,33 +14,11 @@
         alt="logo"
       />
       <a-menu mode="vertical" theme="dark" v-model:selectedKeys="selectedKeys">
-        <a-menu-item key="1">
-          <a-icon type="home"></a-icon>
-          <span class="nav-text">Home</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="contacts" />
-          <span class="nav-text">Clients</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="bank" />
-          <span class="nav-text">Contracts</span>
-        </a-menu-item>
-        <a-menu-item key="4">
-          <a-icon type="cluster" />
-          <span class="nav-text">Products</span>
-        </a-menu-item>
-        <a-menu-item key="5">
-          <a-icon type="audit" />
-          <span class="nav-text">Hirings</span>
-        </a-menu-item>
-        <a-menu-item key="6">
-          <a-icon type="user" />
-          <span class="nav-text">Users</span>
-        </a-menu-item>
-        <a-menu-item key="7">
-          <a-icon type="folder-open" />
-          <span class="nav-text">Templates</span>
+        <a-menu-item v-for="(tab, index) in tabs" :key="index + 1">
+          <Nuxt-Link :to="tab.route || '/'">
+            <a-icon :type="tab.icon"></a-icon>
+            <span class="nav-text">{{ tab.name }}</span>
+          </Nuxt-Link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -54,21 +33,41 @@
           <NavHeader style="margin-left: auto; margin-right: 2rem" />
         </div>
       </a-layout-header>
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content class="content" :style="{ margin: '24px 16px 0' }">
         <slot></slot>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        Cacao's Admin Site ©2021
+        Cacao's Admin Site ©{{ year }}
       </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
+const tabs = [
+  { name: 'Home', icon: 'home', route: '/' },
+  { name: 'Clients', icon: 'contacts', route: '/clients' },
+  { name: 'Contracts', icon: 'bank', route: '/contracts' },
+  { name: 'Products', icon: 'cluster', route: '/products' },
+  { name: 'Hirings', icon: 'audit', route: '/hirings' },
+  { name: 'Users', icon: 'user', route: '/users' },
+  { name: 'Templates', icon: 'folder-open', route: '/templates' },
+]
 @Component({})
 export default class NavSideBar extends Vue {
   collapsed = false
   selectedKeys = ['1']
+  tabs = tabs
+  year = new Date().getFullYear()
+  get selected() {
+    const index = this.tabs.findIndex((value) => {
+      return this.$router.currentRoute.matched.find((route) => {
+        return route.path === value.route
+      })
+    })
+    console.log(index)
+    return [`${index + 1}`]
+  }
 }
 </script>
 
@@ -85,8 +84,13 @@ export default class NavSideBar extends Vue {
   align-items: center;
 }
 .logo {
-  width: 80%;
-  margin: 1rem auto;
-  text-align: center;
+  width: 75%;
+  margin: 12px;
+  align-self: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+.content {
+  height: fit-content;
 }
 </style>
