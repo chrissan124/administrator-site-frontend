@@ -5,6 +5,7 @@
       v-model:collapsed="collapsed"
       collapsed-width="80"
       :trigger="null"
+      class="sider"
       collapsible
       style="display: flex; flex-direction: column; align-items: center"
     >
@@ -43,7 +44,7 @@
   </a-layout>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component, Watch } from 'nuxt-property-decorator'
 const tabs = [
   { name: 'Home', icon: 'home', route: '/' },
   { name: 'Clients', icon: 'contacts', route: '/clients' },
@@ -59,14 +60,14 @@ export default class NavSideBar extends Vue {
   selectedKeys = ['1']
   tabs = tabs
   year = new Date().getFullYear()
-  get selected() {
+  selected() {
     const index = this.tabs.findIndex((value) => {
       return this.$router.currentRoute.matched.find((route) => {
         return route.path === value.route
       })
     })
-    console.log(index)
-    return [`${index + 1}`]
+    console.log('INDEX: ', index)
+    this.selectedKeys = [`${index ? index + 1 : 1}`]
   }
 }
 </script>
@@ -86,7 +87,7 @@ export default class NavSideBar extends Vue {
 .logo {
   width: 75%;
   margin: 12px;
-  align-self: center;
+  display: block;
   margin-right: auto;
   margin-left: auto;
 }

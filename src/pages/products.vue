@@ -1,5 +1,7 @@
 <template>
-  <ProductMain />
+  <CommonErrorBoundary>
+    <ProductMain />
+  </CommonErrorBoundary>
 </template>
 <script lang="ts">
 import { NuxtAxiosInstance } from '@nuxtjs/axios'

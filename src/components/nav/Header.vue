@@ -1,6 +1,8 @@
 <template>
   <a-space align="center" size="middle">
-    <a-icon class="icon" style="font-size: 1.5em" type="bell" />
+    <a-badge :count="1" :dot="true">
+      <a-icon class="icon" style="font-size: 1.5em" type="bell" />
+    </a-badge>
     <a-icon type="setting" class="icon" style="font-size: 1.5em" />
     <a-icon
       type="logout"
