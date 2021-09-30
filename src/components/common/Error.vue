@@ -1,13 +1,5 @@
 <template>
-  <a-result
-    :status="status"
-    :title="`${status}`"
-    :sub-title="
-      status === '404'
-        ? `Sorry, this page wasn't found.`
-        : 'Sorry, something went wrong.'
-    "
-  >
+  <a-result :status="status" :title="`${status}`" :sub-title="parsedStatus">
     <template #extra>
       <a-space>
         <nuxt-link to="/">
@@ -23,11 +15,23 @@
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
 
 @Component
-export default class CommonForm extends Vue {
+export default class CommonError extends Vue {
   @Prop({ default: 'error' })
   statusCode!: string
   status = this.statusCode.toString()
   currentRoute = this.$router.currentRoute.path
+
+  get parsedStatus() {
+    switch (this.status) {
+      case '404':
+        return `Sorry, this page wasn't found.`
+      case '403':
+        return `Sorry, you don't have access to this page`
+      default:
+        return 'Sorry, something went wrong.'
+    }
+  }
+
   reload() {
     window.location.reload()
   }

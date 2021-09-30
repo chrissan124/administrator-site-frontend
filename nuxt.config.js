@@ -28,6 +28,7 @@ export default {
     '~/plugins/antd-ui',
     '~/plugins/antd-message',
     '~/plugins/axios-date',
+    '~/plugins/axios-accessor',
   ],
 
   srcDir: 'src/',

@@ -3,4 +3,6 @@ interface UserCrendentials{
   password:string 
 
 }
-export default UserCrendentials
+
+
+export {UserCrendentials}

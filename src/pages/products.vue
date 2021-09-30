@@ -1,14 +1,19 @@
 <template>
   <CommonErrorBoundary>
-    <ProductMain />
+    <ProductMain class="main" />
   </CommonErrorBoundary>
 </template>
-<script lang="ts">
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
-export default {
-  /*async asyncData({ $axios }: { $axios: NuxtAxiosInstance }) {
-    const products = await $axios.$get('products')
-    return { products }
-  },*/
+
+<style lang="scss" scoped>
+.main {
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
 }
-</script>
+
+@media only screen and (max-width: 1000px) {
+  .main {
+    width: 100%;
+  }
+}
+</style>

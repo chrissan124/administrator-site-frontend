@@ -1,7 +1,5 @@
 import { Vue, Component } from 'nuxt-property-decorator'
-/*function map(items:Array<Object>){
-  return items
-}*/
+
 type Mapper = {
   (items:Array<Object>):Array<Object>
 }
@@ -33,17 +31,47 @@ export default class Crud<T> extends Vue {
   path = ''
   loading = false
   items: Array<Object> = []
-
+  selected:null|Object = null
   pagination:Pagination = {
     current:0,
     pageSize:10,
     total:0
   }
 
+  selectedRowKeys : Array<String> = []
+  rowKey:string = ''
+
   async fetch(){
     await this.get({query:{size:this.pagination.pageSize}})
   }
+  
+  rowSelection (){
+    const {selectedRowKeys} = this
+    return{
+      selectedRowKeys,
+      onSelect:this.onSelection,
+      columnWidth:'10',
+      hideDefaultSelections:true,
+      type:'checkbox'
+    }
+  }
 
+  onSelection(record:T,selected:boolean,selectedRows:Array<Object>){
+    if(selected){
+      let row = ''
+      for(let [key,value] of Object.entries(record)){
+        if(key===this.rowKey){
+          row= value 
+        }
+      }
+      this.selected = record
+      this.selectedRowKeys = [row]
+    }else {
+      this.selectedRowKeys = []
+      this.selected = null
+    }
+  }
+ 
   async get(params:GetParams={}){
     this.loading = true 
     try {
@@ -63,8 +91,11 @@ export default class Crud<T> extends Vue {
 
   }
 
+  handleAction(event:string){
+    console.log(event)
+  }
+
   handleTableChange(pagination:Pagination,filters:Object,sorter:Sorter){
-    console.log(sorter)
     const pager = {...this.pagination}
     pager.current = pagination.current
     this.pagination = pager
@@ -81,7 +112,7 @@ export default class Crud<T> extends Vue {
 
   private handleSorter(sort:Sorter){
    if(sort.field){
-       return `${sort.field.split('_short')[0]}:${sort.order.substr(0,1)}`
+       return `${sort.field.split('_short')[0]}:${sort.order ? sort.order.substr(0,1):'a'}`
    }
   }
 

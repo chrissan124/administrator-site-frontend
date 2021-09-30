@@ -49,7 +49,7 @@ const tabs = [
   { name: 'Home', icon: 'home', route: '/' },
   { name: 'Clients', icon: 'contacts', route: '/clients' },
   { name: 'Contracts', icon: 'bank', route: '/contracts' },
-  { name: 'Products', icon: 'cluster', route: '/products' },
+  { name: 'Products', icon: 'appstore', route: '/products' },
   { name: 'Hirings', icon: 'audit', route: '/hirings' },
   { name: 'Users', icon: 'user', route: '/users' },
   { name: 'Templates', icon: 'folder-open', route: '/templates' },

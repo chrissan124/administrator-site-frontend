@@ -12,7 +12,7 @@ import { VueComponent } from '@nuxtjs/auth-next'
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
 
 @Component
-export default class CommonForm extends Vue {
+export default class ErrorBoundary extends Vue {
   /* @Prop({ default: true })
   stopPropagation!: boolean*/
   err: boolean = false
@@ -25,7 +25,7 @@ export default class CommonForm extends Vue {
     this.err = true
     this.vm = vm
     this.info = info
-    console.log('ERROR CAPTURED', this.err)
+    console.log('ERROR CAPTURED', err)
   }
 }
 </script>

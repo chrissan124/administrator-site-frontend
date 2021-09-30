@@ -5,5 +5,9 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  asyncData(ctx) {
+    console.log(ctx.store.getters['statusStore/status'])
+  },
+})
 </script>

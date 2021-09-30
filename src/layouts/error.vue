@@ -13,7 +13,7 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
     return ctx.$auth.user ? 'default' : 'blank'
   },
 })
-export default class CommonForm extends Vue {
+export default class ErrorLayout extends Vue {
   @Prop({ default: { statusCode: 500 } })
   error!: NuxtError
   status = this.error.statusCode

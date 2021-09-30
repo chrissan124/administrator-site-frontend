@@ -4,4 +4,8 @@
     transition: color 0.3s;
     color: #1890ff;
   }
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
 }
