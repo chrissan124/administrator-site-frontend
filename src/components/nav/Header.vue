@@ -10,7 +10,7 @@
       class="icon"
       style="font-size: 1.5em"
     />
-    <h3>Welcome, {{ name }}</h3>
+    <h3 class="welcome">Welcome, {{ name }}</h3>
   </a-space>
 </template>
 <script lang="ts">
@@ -29,5 +29,10 @@ export default class NavHeader extends Vue {
 <style lang="scss" scoped>
 .icon {
   @include icon-hover;
+}
+@media screen and (max-width: 990px) {
+  .welcome {
+    font-size: small;
+  }
 }
 </style>

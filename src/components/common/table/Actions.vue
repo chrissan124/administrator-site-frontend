@@ -11,7 +11,7 @@
         >{{ button.text }}</a-button
       >
     </a-space>
-    <a-popover :class="miniClass.mini">
+    <a-popover v-if="!onlyIcons" :class="miniClass.mini">
       <template slot="content">
         <a-space size="middle" align="center">
           <a-icon
@@ -27,6 +27,17 @@
       </template>
       <a-icon :rotate="90" style="font-size: 1.5em" type="more" />
     </a-popover>
+    <a-space v-else-if="onlyIcons" size="large">
+      <a-icon
+        :key="index"
+        v-for="(button, index) in buttons"
+        class="icon"
+        style="font-size: 1.2em"
+        :type="button.icon"
+        @click="clicked(button.event)"
+        :disabled="disabled"
+      />
+    </a-space>
   </div>
 </template>
 
@@ -38,7 +49,7 @@ export interface Buttons {
   delete: boolean | Function
   restore: boolean | Function
 }
-interface ButtonProps {
+export interface ButtonProps {
   text: string
   icon: string
   event: string
@@ -100,6 +111,9 @@ export default class TableLayout extends Vue {
   @Prop({ default: false })
   mini!: boolean
 
+  @Prop({ default: false })
+  onlyIcons!: boolean
+
   get disabled() {
     return !this.current || this.current !== this.selected
   }
@@ -111,7 +125,7 @@ export default class TableLayout extends Vue {
   get miniClass() {
     return {
       default: this.mini ? 'default-mini' : 'default',
-      mini: this.mini ? 'responsive-mini' : 'responsive',
+      mini: this.mini || this.onlyIcons ? 'responsive-mini' : 'responsive',
     }
   }
 
@@ -121,10 +135,8 @@ export default class TableLayout extends Vue {
     })
     .concat(this.extraButtons)
 
-  @Emit('action')
   clicked(event: string) {
-    console.log('selected key! ', this.selected)
-    return event
+    this.$emit(event)
   }
 }
 </script>
@@ -141,7 +153,7 @@ export default class TableLayout extends Vue {
   display: block;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1300px) {
   .default {
     display: none;
   }

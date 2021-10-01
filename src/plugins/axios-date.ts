@@ -20,7 +20,6 @@ function humanizeDate(item:Object){
     try {
     for (let [key, value] of Object.entries(item)) {
       const date = DateTime.fromISO(value)
-      //console.log(key, value)
       if (date.isValid) {
        item = {...item,[key]:date.toLocaleString(DateTime.DATETIME_SHORT),[`${key}_short`]:date.toLocaleString()}
       }

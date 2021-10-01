@@ -1,6 +1,5 @@
 import {Store} from 'vuex'
 import { Context } from '@nuxt/types'
-import { initialiseStores } from "../utils/store-accessor";
 import {StatusState} from './statusStore';
 export * from "../utils/store-accessor";
 

@@ -1,20 +1,35 @@
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component,Prop,Watch } from 'nuxt-property-decorator'
 
 @Component({})
-export default class Crud<T> extends Vue {
-
+export default class Form extends Vue {
+  @Prop({required:true})
+  callback!:Function
+  @Prop({default:null})
+  initialState!:Object|null
+  @Prop({default:null})
+  visible!:boolean|null
   formState={}
-
   $refs!:{
     formRef:HTMLFormElement
   }
-  rules =[]
+  rules ={}
   loadingSubmit = false 
 
-  async handleSubmit(callback:Function){
+  created(){
+    if(this.initialState){
+      this.formState = this.initialState
+    }
+  }
+
+  reset(){
+    //this.$refs.formRef.resetFields()
+    this.formState = this.initialState ||{}
+  }
+
+  async handleSubmit(){
     this.$refs.formRef.validate((valid:boolean)=>{
       if(valid){
-        callback(this.formState)
+        this.callback(this.formState)
       }
     })
   }

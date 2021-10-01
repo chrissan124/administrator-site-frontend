@@ -9,3 +9,13 @@
     cursor: not-allowed;
   }
 }
+
+@media screen and (max-width: 990px) {
+  body {
+    font-size: smaller;
+  }
+}
+
+.ant-table.ant-table-rtl {
+  overflow-x: scroll;
+}

@@ -1,4 +1,5 @@
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component,PropSync } from 'nuxt-property-decorator'
+import { parseError } from '../utils/error-parser'
 
 type Mapper = {
   (items:Array<Object>):Array<Object>
@@ -37,10 +38,10 @@ export default class Crud<T> extends Vue {
     pageSize:10,
     total:0
   }
-
+  sort = ''
   selectedRowKeys : Array<String> = []
   rowKey:string = ''
-
+  getParams = {}
   async fetch(){
     await this.get({query:{size:this.pagination.pageSize}})
   }
@@ -74,8 +75,9 @@ export default class Crud<T> extends Vue {
  
   async get(params:GetParams={}){
     this.loading = true 
+    this.items = []
     try {
-      const response = await this.$axios.get(params.path||this.path,{params:params.query})
+      const response = await this.$axios.get(params.path||this.path,{params:{sort: this.sort, ...this.getParams, ...params.query}})
       const items:Array<T> = response.data
       const pagination = {...this.pagination}
       this.items = params.mapper? params.mapper(items):map(items)
@@ -91,8 +93,61 @@ export default class Crud<T> extends Vue {
 
   }
 
-  handleAction(event:string){
-    console.log(event)
+  async create(item:T,url?:string){
+    const key = 'x'
+    this.$message.loading({content:'Submitting...',key:key})
+    try {
+
+      const response = await this.$axios.post(url|| this.path,item)
+      if (response.status===200){
+        this.$message.success({content:'Item created',key:key})
+        this.get()
+      }else{
+        const msg = response.data.error || `Couldn't submit item`
+        this.$message.error({content:msg,key:key})
+      }
+    } catch (error) {
+      this.$message.error({content:parseError(error),key:key,duration:3})
+    }
+  }
+
+  async update(item:T, url?:string){
+    const key = 'x'
+    this.$message.loading({content:'Updating...',key:key})
+    try {
+      await this.$axios.$put(url||`${this.path}/${this.selectedRowKeys[0]}`,item)
+      await this.get()
+      this.$message.success({content:'Item updated',key:key})
+    } catch (error) {
+      this.$message.error({content:parseError(error),key:key,duration:3})
+    }
+  }
+
+  handleDelete(description?:string,hardDelete:boolean=false){
+    this.$confirm(
+      {
+        title:'Delete Item?',
+        onOk:()=>{ this.delete(hardDelete)},
+        okType:'danger',
+        centered:true,
+        content:description||'Most items can be restored if desired.'
+      }
+    )
+  }
+
+  async delete(hardDelete=false){
+    const key = 'x'
+    this.$message.loading({content:'Deleting...',key:key})
+    try {
+      console.log('URL',this.path+'/'+this.selectedRowKeys[0])
+      await this.$axios.delete(`${this.path}/${this.selectedRowKeys[0]}`)
+      await this.get()
+      this.$message.success({content:hardDelete?'Fully deleted':'Moved to deleted',key:key})
+  
+    } catch (error) {
+      console.log(error)
+      this.$message.error({content:parseError(error),key:key,duration:3})
+    }
   }
 
   handleTableChange(pagination:Pagination,filters:Object,sorter:Sorter){
@@ -112,7 +167,8 @@ export default class Crud<T> extends Vue {
 
   private handleSorter(sort:Sorter){
    if(sort.field){
-       return `${sort.field.split('_short')[0]}:${sort.order ? sort.order.substr(0,1):'a'}`
+       this.sort = `${sort.field.split('_short')[0]}:${sort.order ? sort.order.substr(0,1):'a'}`
+       return this.sort
    }
   }
 

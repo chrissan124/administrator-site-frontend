@@ -1,5 +1,12 @@
 <template>
   <div>
+    <CommonFormModal
+      :handleCancel="handleCancel"
+      :visible="visible"
+      :title="`Add ${header.title}`"
+    >
+      <slot name="form" />
+    </CommonFormModal>
     <div class="header">
       <a-space size="large" align="center">
         <a-space align="center">
@@ -11,52 +18,60 @@
           <h2 style="margin-bottom: 0.25em">{{ header.title || header }}</h2>
         </a-space>
         <a-button
-          style="width: 12em; margin: 1.5em auto; display: block"
+          style="width: 10em; margin: 1.5em auto; display: block"
           type="primary"
           icon="plus"
+          @click="showModal"
         >
           ADD
         </a-button>
       </a-space>
       <slot name="header" />
-      <a-tooltip placement="left">
-        <template slot="title">
-          <span>{{ helpInfo }}</span>
-        </template>
-        <a-icon
-          type="question-circle"
-          style="font-size: 1.75em; margin-right: 0"
-        />
-      </a-tooltip>
+      <CommonTableRecycle
+        v-if="recycleProps"
+        :column="recycleProps.column"
+        :id="recycleProps.id"
+        :url="recycleProps.url"
+        :restore="recycleProps.restore"
+        :remove="recycleProps.remove"
+      />
     </div>
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'nuxt-property-decorator'
+import { Component, Vue, Prop, Emit, mixins } from 'nuxt-property-decorator'
+import Modal from '../../../mixins/modal'
 
 interface Header {
   title: string
   icon: string
 }
 
+interface Nav {
+  link: string
+  icon: string
+  text: string
+}
+
+interface RecycleProps {
+  column: Array<Object>
+  id: string
+  url: string
+  restore?: boolean
+  remove?: boolean
+}
 @Component({})
-export default class TableLayout extends Vue {
+export default class TableLayout extends mixins(Modal) {
   @Prop({ required: true })
-  header!: string | Header
-  @Prop({
-    default:
-      'Select a row to edit or delete it, or click Add to create more items!',
-  })
-  helpInfo!: string
+  header!: Header
+
   @Prop({ default: null })
   selected!: null | Object
 
-  @Emit('action')
-  action(event: string) {
-    return event
-  }
+  @Prop({ default: null })
+  recycleProps!: null | RecycleProps
 }
 </script>
 
@@ -67,5 +82,8 @@ export default class TableLayout extends Vue {
   justify-content: space-between;
   margin: 1.5em 0;
   align-items: center;
+}
+.icon {
+  @include icon-hover;
 }
 </style>

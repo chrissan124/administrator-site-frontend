@@ -43,7 +43,8 @@
 }
 .image {
   height: 100%;
-  background: url('~assets/img/login_photo.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6)),
+    url('~assets/img/login_photo.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position-y: center;

@@ -3,22 +3,28 @@
     <a-layout-sider
       breakpoint="lg"
       v-model:collapsed="collapsed"
-      collapsed-width="80"
+      :collapsed-width="proportions.collapsedWidth"
+      :width="proportions.width"
       :trigger="null"
       class="sider"
       collapsible
       style="display: flex; flex-direction: column; align-items: center"
     >
       <img
-        class="logo"
+        :class="`logo`"
         src="~/assets/img/cacao/Logo_Cacao_ONLY_White.png"
         alt="logo"
       />
-      <a-menu mode="vertical" theme="dark" v-model:selectedKeys="selectedKeys">
+      <a-menu
+        :class="menuHidden"
+        mode="vertical"
+        theme="dark"
+        v-model:selectedKeys="selectedKeys"
+      >
         <a-menu-item v-for="(tab, index) in tabs" :key="index + 1">
           <Nuxt-Link :to="tab.route || '/'">
-            <a-icon :type="tab.icon"></a-icon>
-            <span class="nav-text">{{ tab.name }}</span>
+            <a-icon :style="menuItems.style" :type="tab.icon"></a-icon>
+            <span :class="`nav-text ${menuItems.class}`">{{ tab.name }}</span>
           </Nuxt-Link>
         </a-menu-item>
       </a-menu>
@@ -44,7 +50,8 @@
   </a-layout>
 </template>
 <script lang="ts">
-import { Vue, Component, Watch } from 'nuxt-property-decorator'
+import { Component, mixins } from 'nuxt-property-decorator'
+import WindowListener from '../../mixins/windowListener'
 const tabs = [
   { name: 'Home', icon: 'home', route: '/' },
   { name: 'Clients', icon: 'contacts', route: '/clients' },
@@ -55,7 +62,7 @@ const tabs = [
   { name: 'Templates', icon: 'folder-open', route: '/templates' },
 ]
 @Component({})
-export default class NavSideBar extends Vue {
+export default class NavSideBar extends mixins(WindowListener) {
   collapsed = false
   selectedKeys = ['1']
   tabs = tabs
@@ -68,6 +75,28 @@ export default class NavSideBar extends Vue {
     })
     console.log('INDEX: ', index)
     this.selectedKeys = [`${index ? index + 1 : 1}`]
+  }
+  get proportions() {
+    return {
+      width: this.windowWidth <= 1000 ? 80 : 200,
+      collapsedWidth: this.windowWidth <= 1000 ? 0 : 80,
+    }
+  }
+  get menuHidden() {
+    if (this.windowWidth <= 1000 && this.collapsed) {
+      return 'hidden icon-big'
+    }
+    return 'default'
+  }
+
+  get menuItems() {
+    if (this.windowWidth <= 1000) {
+      return {
+        class: 'hidden',
+        style: 'font-size:1.5em;margin-left: 0.8rem;',
+      }
+    }
+    return { class: 'default', style: {} }
   }
 }
 </script>
@@ -93,5 +122,11 @@ export default class NavSideBar extends Vue {
 }
 .content {
   height: fit-content;
+}
+.hidden {
+  display: none;
+}
+.icon-big {
+  font-size: 2em;
 }
 </style>
