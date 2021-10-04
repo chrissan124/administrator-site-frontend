@@ -2,19 +2,19 @@
   <div>
     <CommonTableLayout
       :selected="selected"
-      :header="{ title: 'Products', icon: 'appstore' }"
+      :header="{ title: 'Users', icon: 'user' }"
       :recycleProps="{
         url: this.path,
-        id: 'productId',
+        id: 'userId',
         column: [this.columns[0]],
         remove: true,
       }"
       @revive="get"
     >
-      <ProductForm slot="form" :callback="create" />
+      <UserForm slot="form" :callback="create" />
       <a-table
         :columns="columns"
-        :row-key="(record) => record.productId"
+        :row-key="(record) => record.userId"
         :data-source="items"
         :loading="loading"
         layout="auto"
@@ -37,18 +37,22 @@
           @update="showModal"
           @suspend="suspend(true)"
           @activate="suspend(false)"
-          @delete="handleDelete"
+          @delete="
+            handleDelete(
+              'Users can be restored if desired, by going to the recycling bin.'
+            )
+          "
           :defaultButtons="{ details: false }"
           :extraButtons="extraActions(record)"
         />
       </a-table>
     </CommonTableLayout>
     <CommonFormModal
-      title="Edit Product"
+      title="Edit User"
       :handleCancel="handleCancel"
       :visible="visible"
     >
-      <ProductForm :callback="handleUpdate" :initialState="selected" />
+      <!--       <ProductForm :callback="handleUpdate" :initialState="selected" /> -->
     </CommonFormModal>
   </div>
 </template>
@@ -56,31 +60,33 @@
 import { Component, mixins } from 'nuxt-property-decorator'
 import Modal from '../../mixins/modal'
 import Crud from '../../mixins/crud'
-import { Product } from '../../types/product'
+import { User } from '../../types/user'
 import { ButtonProps } from '../common/table/Actions.vue'
 const columns = [
   {
+    title: 'Email',
+    dataIndex: 'email',
+    sorter: true,
+    width: '30%',
+  },
+  {
     title: 'Name',
-    dataIndex: 'name',
-    width: '25%',
+    dataIndex: 'firstName',
     sorter: true,
   },
   {
-    title: 'Created',
-    dataIndex: 'createdAt_short',
+    title: 'Role',
+    dataIndex: 'Role.name',
     sorter: true,
-    responsive: ['md'],
   },
   {
     title: 'Updated',
     dataIndex: 'updatedAt',
     sorter: true,
-    responsive: ['md'],
   },
   {
     title: 'Status',
     dataIndex: 'Status.name',
-    responsive: ['md'],
     scopedSlots: {
       customRender: 'status',
     },
@@ -89,21 +95,20 @@ const columns = [
     title: '',
     align: 'center',
     fixed: 'right',
-    dataIndex: 'productId',
-    responsive: ['md'],
+    dataIndex: 'userId',
     scopedSlots: {
       customRender: 'actions',
     },
   },
 ]
 @Component({})
-export default class ProductMain extends mixins(Crud, Modal) {
-  path = '/products'
+export default class UserMain extends mixins(Crud, Modal) {
+  path = '/users'
   columns = columns
-  sort = 'name'
-  extraActions(product: Product): ButtonProps[] {
+  sort = 'email'
+  extraActions(user: User): ButtonProps[] {
     const statuses = this.$store.getters['statusStore/status']
-    if (product.statusFk === statuses.ACTIVE) {
+    if (user.statusFk === statuses.ACTIVE) {
       return [
         {
           text: 'Suspend',
@@ -111,7 +116,7 @@ export default class ProductMain extends mixins(Crud, Modal) {
           event: 'suspend',
         },
       ]
-    } else if (product.statusFk === statuses.SUSPENDED) {
+    } else if (user.statusFk === statuses.SUSPENDED) {
       return [
         {
           text: 'Activate',
@@ -123,16 +128,21 @@ export default class ProductMain extends mixins(Crud, Modal) {
 
     return []
   }
-  handleUpdate(item: Product) {
-    this.update({ productId: item.productId, name: item.name })
+  handleUpdate(item: User) {
+    this.update({ ...item })
   }
   async suspend(suspend: boolean = true) {
     if (this.selected) {
-      await this.updateStatus(suspend ? 'suspended' : 'active')
+      this.$confirm({
+        title: suspend ? 'Block user?' : 'Unblock user?',
+        onOk: () => {
+          this.updateStatus(suspend ? 'suspended' : 'active')
+        },
+      })
     }
   }
   created() {
-    this.rowKey = 'productId'
+    this.rowKey = 'userId'
   }
 }
 </script>

@@ -152,6 +152,9 @@ export default class TableLayout extends Vue {
 .responsive-mini {
   display: block;
 }
+.icon {
+  @include icon-hover;
+}
 
 @media only screen and (max-width: 1300px) {
   .default {
@@ -160,9 +163,6 @@ export default class TableLayout extends Vue {
 
   .responsive {
     display: block;
-  }
-  .icon {
-    @include icon-hover;
   }
 }
 </style>

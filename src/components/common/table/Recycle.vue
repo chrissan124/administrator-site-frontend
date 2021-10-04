@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-tooltip placement="left">
-      <template slot="title"> Show Deleted </template>
+      <template slot="title"> Recycling Bin </template>
       <a-icon
         type="inbox"
         class="icon"
@@ -43,6 +43,8 @@
           :mini="true"
           :selected="actions"
           :current="selectedRowKeys[0]"
+          @delete="handleDelete('This action cannot be undone.', true)"
+          @restore="revive"
           :defaultButtons="{ details: false, delete: false, update: false }"
           :extraButtons="buttons"
         />
@@ -115,6 +117,7 @@ export default class TableRecycle extends mixins(Crud, Modal, WindowListener) {
 <style lang="scss" scoped>
 .icon {
   @include icon-hover;
+  fill: currentColor;
 }
 .modal {
   max-height: 80vh;

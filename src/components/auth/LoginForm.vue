@@ -76,7 +76,6 @@ export default class AuthLoginForm extends Vue {
       },
     ],
   }
-  //Todo: proper login
   async onSubmit() {
     this.$refs.formRef.validate((valid: boolean) => {
       if (valid) {

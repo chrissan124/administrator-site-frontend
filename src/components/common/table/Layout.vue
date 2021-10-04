@@ -18,7 +18,8 @@
           <h2 style="margin-bottom: 0.25em">{{ header.title || header }}</h2>
         </a-space>
         <a-button
-          style="width: 10em; margin: 1.5em auto; display: block"
+          style="width: 6em; margin: 1.5em auto; display: block"
+          class="button"
           type="primary"
           icon="plus"
           @click="showModal"
@@ -34,6 +35,7 @@
         :url="recycleProps.url"
         :restore="recycleProps.restore"
         :remove="recycleProps.remove"
+        @revive="handleRevive"
       />
     </div>
     <slot />
@@ -41,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit, mixins } from 'nuxt-property-decorator'
+import { Component, Prop, mixins } from 'nuxt-property-decorator'
 import Modal from '../../../mixins/modal'
 
 interface Header {
@@ -72,6 +74,10 @@ export default class TableLayout extends mixins(Modal) {
 
   @Prop({ default: null })
   recycleProps!: null | RecycleProps
+
+  handleRevive() {
+    this.$emit('revive')
+  }
 }
 </script>
 
@@ -85,5 +91,10 @@ export default class TableLayout extends mixins(Modal) {
 }
 .icon {
   @include icon-hover;
+}
+@media screen and(max-width: 900) {
+  .button {
+    width: 6em;
+  }
 }
 </style>

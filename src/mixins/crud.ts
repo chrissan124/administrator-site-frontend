@@ -1,4 +1,4 @@
-import { Vue, Component,PropSync } from 'nuxt-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
 import { parseError } from '../utils/error-parser'
 
 type Mapper = {
@@ -22,13 +22,15 @@ type GetParams = {
   mapper?:Mapper
 }
 
+type Base = { [x: string]: any; statusFk: any; }
+
 function map<T>(items:Array<T>){
   return items
 }
 @Component({
 
 })
-export default class Crud<T> extends Vue {
+export default class Crud<T extends Base> extends Vue {
   path = ''
   loading = false
   items: Array<Object> = []
@@ -72,7 +74,7 @@ export default class Crud<T> extends Vue {
       this.selected = null
     }
   }
- 
+
   async get(params:GetParams={}){
     this.loading = true 
     this.items = []
@@ -111,7 +113,7 @@ export default class Crud<T> extends Vue {
     }
   }
 
-  async update(item:T, url?:string){
+  async update(item:Object, url?:string){
     const key = 'x'
     this.$message.loading({content:'Updating...',key:key})
     try {
@@ -123,6 +125,16 @@ export default class Crud<T> extends Vue {
     }
   }
 
+  async updateStatus(statusName:string){
+      if (this.selected) {
+      const statuses = this.$store.getters['statusStore/status']
+      await this.update({
+        [this.rowKey]:this.selectedRowKeys[0],
+        statusFk: statuses[statusName.toUpperCase()]
+      })
+    }
+  }
+
   handleDelete(description?:string,hardDelete:boolean=false){
     this.$confirm(
       {
@@ -130,7 +142,7 @@ export default class Crud<T> extends Vue {
         onOk:()=>{ this.delete(hardDelete)},
         okType:'danger',
         centered:true,
-        content:description||'Most items can be restored if desired.'
+        content:description||'Most items can be restored if desired, by going to the recycling bin.'
       }
     )
   }
@@ -139,10 +151,24 @@ export default class Crud<T> extends Vue {
     const key = 'x'
     this.$message.loading({content:'Deleting...',key:key})
     try {
-      console.log('URL',this.path+'/'+this.selectedRowKeys[0])
       await this.$axios.delete(`${this.path}/${this.selectedRowKeys[0]}`)
       await this.get()
       this.$message.success({content:hardDelete?'Fully deleted':'Moved to deleted',key:key})
+  
+    } catch (error) {
+      console.log(error)
+      this.$message.error({content:parseError(error),key:key,duration:3})
+    }
+  }
+  
+  async revive(){
+    const key = 'x'
+    this.$message.loading({content:'Restoring...',key:key})
+    try {
+      await this.$axios.patch(`${this.path}/${this.selectedRowKeys[0]}`)
+      await this.get()
+      this.$emit('revive')
+      this.$message.success({content:'Restored',key:key})
   
     } catch (error) {
       console.log(error)

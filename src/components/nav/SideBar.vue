@@ -59,6 +59,7 @@ const tabs = [
   { name: 'Products', icon: 'appstore', route: '/products' },
   { name: 'Hirings', icon: 'audit', route: '/hirings' },
   { name: 'Users', icon: 'user', route: '/users' },
+  { name: 'Roles', icon: 'team', route: '/roles' },
   { name: 'Templates', icon: 'folder-open', route: '/templates' },
 ]
 @Component({})
