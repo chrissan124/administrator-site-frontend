@@ -1,0 +1,38 @@
+<template>
+  <a-space align="center" size="middle">
+    <a-badge :count="1" :dot="true">
+      <a-icon class="icon" style="font-size: 1.5em" type="bell" />
+    </a-badge>
+    <a-icon type="setting" class="icon" style="font-size: 1.5em" />
+    <a-icon
+      type="logout"
+      @click="logout"
+      class="icon"
+      style="font-size: 1.5em"
+    />
+    <h3 class="welcome">Welcome, {{ name }}</h3>
+  </a-space>
+</template>
+<script lang="ts">
+import { Vue, Component } from 'nuxt-property-decorator'
+const key = 'out'
+@Component({})
+export default class NavHeader extends Vue {
+  name = this.$auth.user?.firstName || 'user'
+  async logout() {
+    this.$message.loading({ content: 'Signing out', key })
+    await this.$auth.logout()
+    this.$message.success({ content: 'Signed out', key, duration: 1 })
+  }
+}
+</script>
+<style lang="scss" scoped>
+.icon {
+  @include icon-hover;
+}
+@media screen and (max-width: 990px) {
+  .welcome {
+    font-size: small;
+  }
+}
+</style>

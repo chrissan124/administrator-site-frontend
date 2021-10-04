@@ -26,8 +26,8 @@
     "types": [
       "@nuxt/types",
       "@nuxtjs/axios",
-      "@ant-design/icons-vue",
-      "@types/node"
+      "@types/node",
+      "@nuxtjs/auth-next"
     ]
   },
   "exclude": [

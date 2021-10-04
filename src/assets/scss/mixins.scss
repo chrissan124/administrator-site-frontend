@@ -1,0 +1,22 @@
+@mixin icon-hover {
+  cursor: pointer;
+  &:hover {
+    transition: color 0.3s;
+    color: #1890ff;
+    fill: #1890ff;
+  }
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+}
+
+@media screen and (max-width: 990px) {
+  body {
+    font-size: smaller;
+  }
+}
+
+.ant-table.ant-table-rtl {
+  overflow-x: scroll;
+}
