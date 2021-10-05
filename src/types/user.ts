@@ -18,6 +18,7 @@ interface Permission{
 
 export interface Role {
   name:string,
+  roleId:string,
   deletable:boolean,
   description?:string,
   permissionFk:string,

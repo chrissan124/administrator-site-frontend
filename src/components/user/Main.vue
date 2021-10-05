@@ -24,6 +24,9 @@
         :row-selection="rowSelection()"
         style="background-color: white; padding: 1.5em"
       >
+        <span slot="name" slot-scope="name, record">
+          {{ name }} {{ record.lastName }}
+        </span>
         <span slot="status" slot-scope="status">
           <a-tag :color="status === 'ACTIVE' ? 'green' : 'red'">
             {{ status }}
@@ -73,6 +76,9 @@ const columns = [
     title: 'Name',
     dataIndex: 'firstName',
     sorter: true,
+    scopedSlots: {
+      customRender: 'name',
+    },
   },
   {
     title: 'Role',
@@ -125,7 +131,6 @@ export default class UserMain extends mixins(Crud, Modal) {
         },
       ]
     }
-
     return []
   }
   handleUpdate(item: User) {

@@ -88,16 +88,7 @@ export default class AuthLoginForm extends Vue {
               password: this.formState.password,
             },
           })
-          .then((response) => {
-            /*if (response && response.status === 200) {
-              const user = response.data
-              this.$auth.setUser({
-                id: user.userId,
-                roleId: user.Role.roleId,
-                permissions: user.Role.Permissions,
-              })
-            }*/
-          })
+          .then((response) => {})
           .catch((error) => {
             if (error.response && error.response.status === 401) {
               this.error = 'Invalid credentials'

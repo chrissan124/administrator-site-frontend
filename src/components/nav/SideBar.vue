@@ -12,7 +12,7 @@
     >
       <img
         :class="`logo`"
-        src="~/assets/img/cacao/Logo_Cacao_ONLY_White.png"
+        src="~/assets/img/cacao/logo_cacao_white.png"
         alt="logo"
       />
       <a-menu

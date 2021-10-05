@@ -5,7 +5,7 @@
         <nuxt-link to="/">
           <a-button type="primary"> Go back </a-button>
         </nuxt-link>
-        <a-button v-if="status !== '404'" @click="reload">Reload Page</a-button>
+        <a-button v-if="showReload" @click="reload">Reload Page</a-button>
       </a-space>
     </template>
   </a-result>
@@ -21,6 +21,9 @@ export default class CommonError extends Vue {
   status = this.statusCode.toString()
   currentRoute = this.$router.currentRoute.path
 
+  get showReload(): boolean {
+    return !['404', '403'].includes(this.statusCode)
+  }
   get parsedStatus() {
     switch (this.status) {
       case '404':

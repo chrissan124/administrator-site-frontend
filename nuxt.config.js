@@ -29,6 +29,7 @@ export default {
     '~/plugins/antd-message',
     '~/plugins/axios-date',
     '~/plugins/axios-accessor',
+    '~/plugins/easy-jwt',
   ],
 
   srcDir: 'src/',
@@ -87,11 +88,11 @@ export default {
   router: {
     middleware: ['auth'],
   },
-  /*
+
   server: {
     host: process.env.SERVER_HOST,
   },
-*/
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     loaders: {
