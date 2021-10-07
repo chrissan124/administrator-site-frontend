@@ -2,9 +2,9 @@
   <div>
     <CommonTableLayout
       :selected="selected"
-      :header="{ title: 'Roles', icon: 'user' }"
+      :header="{ title: 'Roles', icon: 'team' }"
     >
-      <!-- <UserForm slot="form" :callback="create" /> -->
+      <RoleForm slot="form" :callback="create" />
       <a-table
         :columns="columns"
         :row-key="(record) => record.roleId"
@@ -17,17 +17,15 @@
         :row-selection="rowSelection()"
         style="background-color: white; padding: 1.5em"
       >
-        <span slot="status" slot-scope="status">
-          <a-tag :color="status === 'ACTIVE' ? 'green' : 'red'">
-            {{ status }}
-          </a-tag>
-        </span>
         <CommonTableActions
           slot="actions"
-          slot-scope="actions"
+          slot-scope="actions, record"
+          :defaultButtons="{ delete: false }"
+          :extraButtons="extraActions(record)"
           :selected="actions"
           :current="selectedRowKeys[0]"
           @update="showModal"
+          @details="showDetail"
           @delete="handleDelete('Deleted roles cannot be restored')"
         />
       </a-table>
@@ -37,22 +35,53 @@
       :handleCancel="handleCancel"
       :visible="visible"
     >
-      <!--       <ProductForm :callback="handleUpdate" :initialState="selected" /> -->
+      <RoleForm
+        :callback="handleUpdate"
+        :initialState="{ ...mappedSelected }"
+      />
     </CommonFormModal>
+    <CommonTableDetails
+      v-if="selected"
+      :item="selected"
+      :keys="['name', 'createdAt', 'updatedAt', 'description', 'Permissions']"
+      :config="{ description: { span: 3 }, Permissions: { span: 3 } }"
+      title="Role Info"
+      :visible="detailVisible"
+      :handleCancel="hideDetail"
+    >
+      <template slot="Permissions" slot-scope="prop">
+        <a-tag
+          style="
+            width: 6rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          "
+          v-for="perm in prop"
+          :key="perm.permissionId"
+        >
+          <a-icon :type="mapIcon(perm.type)" /> {{ perm.name }}
+        </a-tag>
+      </template>
+    </CommonTableDetails>
   </div>
 </template>
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import Modal from '../../mixins/modal'
 import Crud from '../../mixins/crud'
-import { Role } from '../../types/user'
+import DetailModal from '../../mixins/detailModal'
+import { Permission, Role } from '../../types/user'
 import { ButtonProps } from '../common/table/Actions.vue'
 const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
     sorter: true,
-    width: '30%',
+  },
+  {
+    title: 'Privileges',
+    dataIndex: 'Permissions.length',
   },
   {
     title: 'Description',
@@ -70,17 +99,45 @@ const columns = [
     title: '',
     align: 'center',
     fixed: 'right',
-    dataIndex: 'userId',
+    dataIndex: 'roleId',
     scopedSlots: {
       customRender: 'actions',
     },
   },
 ]
 @Component({})
-export default class RoleMain extends mixins(Crud, Modal) {
-  path = '/users'
+export default class RoleMain extends mixins(Crud, Modal, DetailModal) {
+  path = '/roles'
+  getPath = '/roles/perms'
   columns = columns
-  sort = 'email'
+  sort = 'name'
+  permissions: Array<Permission> = []
+  permNames: Set<String> = new Set()
+
+  get mappedSelected() {
+    if (!this.selected) {
+      return null
+    }
+    const sel = this.selected as Role
+    return {
+      roleId: sel.roleId,
+      name: sel.name,
+      description: sel.description,
+      perms: sel.Permissions.map((perm) => perm.permissionId),
+    }
+  }
+  mapIcon(action: string) {
+    switch (action) {
+      case 'C':
+        return 'plus-circle'
+      case 'U':
+        return 'edit'
+      case 'D':
+        return 'delete'
+      default:
+        return 'info-circle'
+    }
+  }
   extraActions(role: Role): ButtonProps[] {
     if (role.deletable) {
       return [
@@ -93,15 +150,17 @@ export default class RoleMain extends mixins(Crud, Modal) {
     } else {
       return []
     }
-
-    return []
   }
-  handleUpdate(item: Role) {
-    this.update({ ...item })
+  async handleUpdate(item: Role) {
+    await this.update({ ...item })
+    this.selected = null
+    this.selectedRowKeys = []
   }
 
   created() {
     this.rowKey = 'roleId'
+    this.permissions = this.$store.getters['permissionStore/permission']
+    this.permNames = this.$store.getters['permissionStore/name']
   }
 }
 </script>

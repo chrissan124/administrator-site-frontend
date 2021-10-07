@@ -3,7 +3,9 @@
     <a-badge :count="1" :dot="true">
       <a-icon class="icon" style="font-size: 1.5em" type="bell" />
     </a-badge>
-    <a-icon type="setting" class="icon" style="font-size: 1.5em" />
+    <Nuxt-Link class="notLink" to="/account">
+      <a-icon class="icon" type="setting" style="font-size: 1.5em" />
+    </Nuxt-Link>
     <a-icon
       type="logout"
       @click="logout"
@@ -18,7 +20,9 @@ import { Vue, Component } from 'nuxt-property-decorator'
 const key = 'out'
 @Component({})
 export default class NavHeader extends Vue {
-  name = this.$auth.user?.firstName || 'user'
+  get name() {
+    return this.$auth.user?.firstName || 'user'
+  }
   async logout() {
     this.$message.loading({ content: 'Signing out', key })
     await this.$auth.logout()
@@ -27,12 +31,22 @@ export default class NavHeader extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+.notLink {
+  fill: inherit;
+  color: inherit;
+}
 .icon {
   @include icon-hover;
 }
+.welcome {
+  font-size: small;
+}
 @media screen and (max-width: 990px) {
   .welcome {
-    font-size: small;
+    width: 6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>

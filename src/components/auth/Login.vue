@@ -2,14 +2,17 @@
   <a-card
     :bordered="false"
     :bodyStyle="{
-      width: proportions.width,
-      height: proportions.height,
       padding: 0,
     }"
     class="card"
   >
-    <a-row class="default" style="height: 100%" align="middle" justify="center">
-      <a-col :span="10" class="flex">
+    <img
+      class="logo_back responsive"
+      src="~/assets/img/cacao/logo_cacao_white.png"
+      alt=""
+    />
+    <a-row class="row" align="middle" justify="center">
+      <a-col :lg="10" :xs="24" :flex="1" class="flex">
         <div class="flex" style="flex: 1">
           <h1 class="title">Sign in</h1>
           <AuthLoginForm />
@@ -19,7 +22,7 @@
         </p>
       </a-col>
 
-      <a-col class="image" :span="14">
+      <a-col class="image default" :lg="14" :xs="0">
         <h1 class="cacao-title">Cacao's Admin Site</h1>
         <p>
           A private site designed to manage CacaoenBytes' business resources.
@@ -31,50 +34,25 @@
         />
       </a-col>
     </a-row>
-    <div class="responsive">
-      <img
-        class="logo_back"
-        src="~/assets/img/cacao/logo_cacao_white.png"
-        alt=""
-      />
-      <a-row align="middle" class="responsive wide" justify="center">
-        <a-col>
-          <div class="flex">
-            <h1 class="title">Sign in</h1>
-            <AuthLoginForm />
-            <p style="text-align: center; margin-top: 1rem" class="footer">
-              Don't have an account? Please contact an administrator
-            </p>
-          </div>
-        </a-col>
-      </a-row>
-    </div>
   </a-card>
 </template>
 
 <script lang="ts">
-import { mixins, Component } from 'nuxt-property-decorator'
-import WindowListener from '../../mixins/windowListener'
+import { Vue, Component } from 'nuxt-property-decorator'
+
 @Component({})
-export default class AuthLogin extends mixins(WindowListener) {
-  get proportions() {
-    return {
-      width:
-        this.windowWidth < 600
-          ? '90vw'
-          : this.windowWidth < 900
-          ? '30rem'
-          : '60rem',
-      height: this.windowWidth < 900 ? '20rem' : '30rem',
-    }
-  }
-}
+export default class AuthLogin extends Vue {}
 </script>
 
 <style lang="scss" scoped>
 .card {
   margin: auto;
   border-radius: 10px;
+  width: 60rem;
+  height: 30rem;
+}
+.row {
+  height: 30rem;
 }
 .flex {
   display: flex;
@@ -95,8 +73,6 @@ export default class AuthLogin extends mixins(WindowListener) {
   color: #fff;
   padding: 2rem;
   font-size: 1.5rem;
-  /* text-shadow: 0px 0.5px 1px white;*/
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -120,20 +96,19 @@ export default class AuthLogin extends mixins(WindowListener) {
   margin-bottom: 2rem;
   opacity: 0.9;
 }
-@media screen and (max-width: 900px) {
-  .image {
-    display: none;
+@media screen and (max-width: 992px) {
+  .card {
+    width: 28rem;
+    height: 26rem;
   }
-
-  .default {
-    display: none;
+  .flex {
+    height: 26rem;
   }
   .responsive {
     display: block;
   }
-  .wide {
-    height: 100%;
-    width: 100%;
+  .image {
+    display: none;
   }
   .logo_back {
     width: 12rem;
@@ -144,8 +119,16 @@ export default class AuthLogin extends mixins(WindowListener) {
     left: 0;
     right: 0;
   }
-  .title {
+  /* .title {
     padding-top: 2rem;
+  }*/
+  .footer {
+    text-align: center;
+  }
+  @media screen and (max-width: 576px) {
+    .card {
+      width: 90vw;
+    }
   }
 }
 </style>

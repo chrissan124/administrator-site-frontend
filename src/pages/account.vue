@@ -1,8 +1,10 @@
 <template>
   <CommonErrorBoundary>
-    <ProductMain class="main" />
+    <AccountMain />
   </CommonErrorBoundary>
 </template>
+
+
 
 <style lang="scss" scoped>
 .main {
@@ -11,7 +13,7 @@
   margin-right: auto;
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 1000px) {
   .main {
     width: 100%;
   }

@@ -21,7 +21,11 @@
         theme="dark"
         v-model:selectedKeys="selectedKeys"
       >
-        <a-menu-item v-for="(tab, index) in tabs" :key="index + 1">
+        <a-menu-item
+          v-for="(tab, index) in tabs"
+          :key="index + 1"
+          :title="tab.name"
+        >
           <Nuxt-Link :to="tab.route || '/'">
             <a-icon :style="menuItems.style" :type="tab.icon"></a-icon>
             <span :class="`nav-text ${menuItems.class}`">{{ tab.name }}</span>
@@ -30,7 +34,14 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header :style="{ background: '#fff', padding: 0 }">
+      <a-layout-header
+        :style="{
+          background: '#fff',
+          padding: 0,
+          zIndex: 1,
+          width: '100%',
+        }"
+      >
         <div class="header">
           <a-icon
             class="trigger"
@@ -113,6 +124,7 @@ export default class NavSideBar extends mixins(WindowListener) {
 .header {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 .logo {
   width: 75%;

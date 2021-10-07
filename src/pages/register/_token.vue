@@ -9,7 +9,7 @@ export default Vue.extend({
   async asyncData(ctx) {
     const token = ctx.params.token
     return {
-      token,
+      token: token,
     }
   },
 })

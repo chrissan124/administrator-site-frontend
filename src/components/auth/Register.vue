@@ -48,11 +48,10 @@ export default class AuthLogin extends mixins(WindowListener) {
     try {
       this.$message.loading({ content: 'Signing Up...', key })
       const config = { headers: { Authorization: `Bearer ${this.encoded}` } }
-      const res = await this.$axios.put('/auth/me', { user }, config)
+      const res = await this.$axios.put('/auth/me', { ...user }, config)
       if (res.status === 200) {
-        /*DESCOMENTAR
         await this.$axios.get('auth/logout', config)
-        */
+
         this.$message.success({ content: 'Signed Up', key })
         this.$router.replace('/login')
       } else throw new Error()

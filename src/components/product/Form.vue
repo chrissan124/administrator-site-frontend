@@ -22,7 +22,9 @@
       </a-input>
     </a-form-model-item>
     <a-form-model-item>
-      <a-button icon="plus" @click="handleSubmit">Add Product</a-button>
+      <a-button type="primary" icon="plus" @click="handleSubmit">
+        {{ initialState ? 'Update ' : 'Add ' }}Product</a-button
+      >
     </a-form-model-item>
   </a-form-model>
 </template>

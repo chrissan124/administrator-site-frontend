@@ -10,8 +10,8 @@ export interface User{
   }
 }
 
-interface Permission{
-  type:string,
+export interface Permission{
+  type:'C'|'R'|'U'|'D',
   name:string,
   permissionId:string
 }
@@ -22,5 +22,5 @@ export interface Role {
   deletable:boolean,
   description?:string,
   permissionFk:string,
-  Permission:Array<Permission>
+  Permissions:Array<Permission>
 }

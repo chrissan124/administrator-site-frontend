@@ -1,9 +1,6 @@
 <template>
-  <CommonErrorBoundary>
-    <ProductMain class="main" />
-  </CommonErrorBoundary>
+  <RoleMain class="main" />
 </template>
-
 <style lang="scss" scoped>
 .main {
   width: 85%;

@@ -32,6 +32,7 @@ function map<T>(items:Array<T>){
 })
 export default class Crud<T extends Base> extends Vue {
   path = ''
+  getPath:null|string=null
   loading = false
   items: Array<Object> = []
   selected:null|Object = null
@@ -79,7 +80,7 @@ export default class Crud<T extends Base> extends Vue {
     this.loading = true 
     this.items = []
     try {
-      const response = await this.$axios.get(params.path||this.path,{params:{sort: this.sort, ...this.getParams, ...params.query}})
+      const response = await this.$axios.get(this.getPath||this.path,{params:{sort: this.sort, ...this.getParams, ...params.query}})
       const items:Array<T> = response.data
       const pagination = {...this.pagination}
       this.items = params.mapper? params.mapper(items):map(items)

@@ -48,7 +48,7 @@
       :handleCancel="handleCancel"
       :visible="visible"
     >
-      <ProductForm :callback="handleUpdate" :initialState="selected" />
+      <ProductForm :callback="handleUpdate" :initialState="{ ...selected }" />
     </CommonFormModal>
   </div>
 </template>

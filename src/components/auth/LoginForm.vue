@@ -92,6 +92,8 @@ export default class AuthLoginForm extends Vue {
           .catch((error) => {
             if (error.response && error.response.status === 401) {
               this.error = 'Invalid credentials'
+            } else if (error.response && error.response.status === 403) {
+              this.error = 'This user is blocked'
             } else {
               this.error = 'An unknown server error has occurred'
             }

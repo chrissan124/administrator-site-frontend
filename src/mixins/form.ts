@@ -22,7 +22,7 @@ export default class Form extends Vue {
   }
 
   reset(){
-    //this.$refs.formRef.resetFields()
+    this.$refs.formRef.resetFields()
     this.formState = this.initialState ||{}
   }
 

@@ -26,6 +26,9 @@
       >
         <span slot="name" slot-scope="name, record">
           {{ name }} {{ record.lastName }}
+          <span style="font-weight: bolder">{{
+            record.userId === currentUser ? '(You)' : ''
+          }}</span>
         </span>
         <span slot="status" slot-scope="status">
           <a-tag :color="status === 'ACTIVE' ? 'green' : 'red'">
@@ -36,6 +39,7 @@
           slot="actions"
           slot-scope="actions, record"
           :selected="actions"
+          v-if="record.userId !== currentUser"
           :current="selectedRowKeys[0]"
           @update="showModal"
           @suspend="suspend(true)"
@@ -55,7 +59,7 @@
       :handleCancel="handleCancel"
       :visible="visible"
     >
-      <!--       <ProductForm :callback="handleUpdate" :initialState="selected" /> -->
+      <UserUpdateForm :callback="handleUpdate" :initialState="selected" />
     </CommonFormModal>
   </div>
 </template>
@@ -112,6 +116,11 @@ export default class UserMain extends mixins(Crud, Modal) {
   path = '/users'
   columns = columns
   sort = 'email'
+
+  get currentUser(): undefined | string {
+    return this.$auth.user?.userId as undefined | string
+  }
+
   extraActions(user: User): ButtonProps[] {
     const statuses = this.$store.getters['statusStore/status']
     if (user.statusFk === statuses.ACTIVE) {
@@ -138,8 +147,15 @@ export default class UserMain extends mixins(Crud, Modal) {
   }
   async suspend(suspend: boolean = true) {
     if (this.selected) {
+      const fullName =
+        (this.selected as User).firstName +
+        ' ' +
+        (this.selected as User).lastName
       this.$confirm({
         title: suspend ? 'Block user?' : 'Unblock user?',
+        content: suspend
+          ? `${fullName} will not be able to access their account any longer.`
+          : `${fullName} will regain access to their account and its privileges.`,
         onOk: () => {
           this.updateStatus(suspend ? 'suspended' : 'active')
         },
