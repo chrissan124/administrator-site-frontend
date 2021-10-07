@@ -61,6 +61,8 @@ import WindowListener from '../../../mixins/windowListener'
 
 @Component({})
 export default class TableRecycle extends mixins(Crud, Modal, WindowListener) {
+  @Prop({ default: 'any' })
+  privilege!: string
   @Prop({ required: true })
   column!: Array<any>
   @Prop({ required: true })
@@ -102,10 +104,10 @@ export default class TableRecycle extends mixins(Crud, Modal, WindowListener) {
   get buttons(): Array<ButtonProps> {
     const actions: Array<ButtonProps> = []
     if (this.restore)
-      actions.push({ text: 'Restore', icon: 'sync', event: 'restore' })
+      actions.push({ text: 'Restore', icon: 'sync', event: 'restore',action:'D' })
 
     this.remove &&
-      actions.push({ text: 'Hard Delete', icon: 'delete', event: 'delete' })
+      actions.push({ text: 'Hard Delete', icon: 'delete', event: 'delete',action:'D' })
     return actions
   }
   handleOpen() {

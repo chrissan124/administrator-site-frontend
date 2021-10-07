@@ -89,6 +89,16 @@
             </a-col>
           </a-row>
         </a-input-group>
+        <a-form-model-item label="Role" prop="roleFk" v-can:update="['role']">
+          <a-select
+            v-model="formState.roleFk"
+            :read-only="!update"
+            :loading="loading"
+            :options="roles"
+            placeholder="Select role"
+          >
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item v-if="update">
           <a-space size="middle">
             <a-button type="primary" @click="handleSubmit">Save</a-button>
@@ -102,6 +112,7 @@
 
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
+import { Role } from '~/src/types/user'
 import Form from '../../mixins/form'
 
 @Component({})
@@ -113,7 +124,20 @@ export default class ProductForm extends mixins(Form) {
     lastName: '',
     email: '',
     phone: '',
-    password: '',
+    roleFk: '',
+  }
+  roles: Array<{ value: string; label: string }> = []
+  async fetch() {
+    this.loading = true
+    const data: Array<Role> = await this.$axios.$get('/roles')
+    this.roles = data.map((role) => {
+      return {
+        value: role.roleId,
+        label: role.name + ': ' + role.description,
+        title: role.name,
+      }
+    })
+    this.loading = false
   }
   toggleUpdate() {
     if (this.update === true) this.cancel()

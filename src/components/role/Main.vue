@@ -3,6 +3,7 @@
     <CommonTableLayout
       :selected="selected"
       :header="{ title: 'Roles', icon: 'team' }"
+      :privilege="privilege"
     >
       <RoleForm slot="form" :callback="create" />
       <a-table
@@ -22,6 +23,7 @@
           slot-scope="actions, record"
           :defaultButtons="{ delete: false }"
           :extraButtons="extraActions(record)"
+          :privilege="privilege"
           :selected="actions"
           :current="selectedRowKeys[0]"
           @update="showModal"
@@ -109,6 +111,7 @@ const columns = [
 export default class RoleMain extends mixins(Crud, Modal, DetailModal) {
   path = '/roles'
   getPath = '/roles/perms'
+  privilege = 'role'
   columns = columns
   sort = 'name'
   permissions: Array<Permission> = []

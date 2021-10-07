@@ -3,6 +3,7 @@
     <a-space size="middle" :class="miniClass.default">
       <a-button
         :key="index"
+        v-can:[button.action]="[privilege]"
         v-for="(button, index) in buttons"
         style="width: 7em"
         :icon="button.icon"
@@ -19,6 +20,7 @@
             v-for="(button, index) in buttons"
             class="icon"
             style="font-size: 1.2em"
+            v-can:[button.action]="[privilege]"
             :type="button.icon"
             @click="clicked(button.event)"
             :disabled="disabled"
@@ -53,22 +55,26 @@ export interface ButtonProps {
   text: string
   icon: string
   event: string
+  action?: 'C' | 'R' | 'U' | 'D'
 }
 const buttons: Array<ButtonProps> = [
   {
     text: 'Details',
     icon: 'info-circle',
     event: 'details',
+    action: 'R',
   },
   {
     text: 'Edit',
     icon: 'edit',
     event: 'update',
+    action: 'U',
   },
   {
     text: 'Delete',
     icon: 'delete',
     event: 'delete',
+    action: 'D',
   },
 ]
 
@@ -90,6 +96,9 @@ const checkButton = (btnName: string, buttons: Object): boolean => {
 
 @Component({})
 export default class TableLayout extends Vue {
+  @Prop({ default: 'any' })
+  privilege!: string
+
   @Prop({ default: null })
   selected!: null | String
 

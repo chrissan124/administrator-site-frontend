@@ -15,7 +15,9 @@
             v-if="header.icon"
             :type="header.icon"
           ></a-icon>
-          <h2 style="margin-bottom: 0.25em">{{ header.title || header }}</h2>
+          <h2 style="margin-bottom: 0.25em">
+            {{ header.title || header }}
+          </h2>
         </a-space>
         <a-button
           style="width: 6em; margin: 1.5em auto; display: block"
@@ -23,13 +25,16 @@
           type="primary"
           icon="plus"
           @click="showModal"
+          v-can:create="[privilege]"
         >
           ADD
         </a-button>
       </a-space>
       <slot name="header" />
       <CommonTableRecycle
+        :privilege="privilege"
         v-if="recycleProps"
+        v-can:delete="[privilege]"
         :column="recycleProps.column"
         :id="recycleProps.id"
         :url="recycleProps.url"
@@ -66,6 +71,8 @@ interface RecycleProps {
 }
 @Component({})
 export default class TableLayout extends mixins(Modal) {
+  @Prop({ default: 'any' })
+  privilege!: string
   @Prop({ required: true })
   header!: Header
 

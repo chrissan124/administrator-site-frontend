@@ -10,6 +10,7 @@
         remove: true,
       }"
       @revive="get"
+      :privilege="privilege"
     >
       <ProductForm slot="form" :callback="create" />
       <a-table
@@ -31,6 +32,7 @@
         </span>
         <CommonTableActions
           slot="actions"
+          :privilege="privilege"
           slot-scope="actions, record"
           :selected="actions"
           :current="selectedRowKeys[0]"
@@ -99,6 +101,7 @@ const columns = [
 @Component({})
 export default class ProductMain extends mixins(Crud, Modal) {
   path = '/products'
+  privilege = 'product'
   columns = columns
   sort = 'name'
   extraActions(product: Product): ButtonProps[] {
@@ -109,6 +112,7 @@ export default class ProductMain extends mixins(Crud, Modal) {
           text: 'Suspend',
           icon: 'frown',
           event: 'suspend',
+          action: 'U',
         },
       ]
     } else if (product.statusFk === statuses.SUSPENDED) {
@@ -117,6 +121,7 @@ export default class ProductMain extends mixins(Crud, Modal) {
           text: 'Activate',
           icon: 'smile',
           event: 'activate',
+          action: 'U',
         },
       ]
     }

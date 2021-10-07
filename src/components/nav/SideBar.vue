@@ -25,6 +25,7 @@
           v-for="(tab, index) in tabs"
           :key="index + 1"
           :title="tab.name"
+          v-can:read="tab.can || ['free']"
         >
           <Nuxt-Link :to="tab.route || '/'">
             <a-icon :style="menuItems.style" :type="tab.icon"></a-icon>
@@ -64,14 +65,19 @@
 import { Component, mixins } from 'nuxt-property-decorator'
 import WindowListener from '../../mixins/windowListener'
 const tabs = [
-  { name: 'Home', icon: 'home', route: '/' },
-  { name: 'Clients', icon: 'contacts', route: '/clients' },
-  { name: 'Contracts', icon: 'bank', route: '/contracts' },
-  { name: 'Products', icon: 'appstore', route: '/products' },
-  { name: 'Hirings', icon: 'audit', route: '/hirings' },
-  { name: 'Users', icon: 'user', route: '/users' },
-  { name: 'Roles', icon: 'team', route: '/roles' },
-  { name: 'Templates', icon: 'folder-open', route: '/templates' },
+  { name: 'Home', icon: 'home', route: '/', can: ['free'] },
+  { name: 'Clients', icon: 'contacts', route: '/clients', can: ['client'] },
+  { name: 'Contracts', icon: 'bank', route: '/contracts', can: ['contract'] },
+  { name: 'Products', icon: 'appstore', route: '/products', can: ['product'] },
+  { name: 'Hirings', icon: 'audit', route: '/hirings', can: ['hiring'] },
+  { name: 'Users', icon: 'user', route: '/users', can: ['user'] },
+  { name: 'Roles', icon: 'team', route: '/roles', can: ['role'] },
+  {
+    name: 'Templates',
+    icon: 'folder-open',
+    route: '/templates',
+    can: ['fileTemplate'],
+  },
 ]
 @Component({})
 export default class NavSideBar extends mixins(WindowListener) {

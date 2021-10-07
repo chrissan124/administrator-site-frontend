@@ -2,6 +2,7 @@
   <div>
     <CommonTableLayout
       :selected="selected"
+      :privilege="privilege"
       :header="{ title: 'Users', icon: 'user' }"
       :recycleProps="{
         url: this.path,
@@ -37,6 +38,7 @@
         </span>
         <CommonTableActions
           slot="actions"
+          :privilege="privilege"
           slot-scope="actions, record"
           :selected="actions"
           v-if="record.userId !== currentUser"
@@ -114,6 +116,7 @@ const columns = [
 @Component({})
 export default class UserMain extends mixins(Crud, Modal) {
   path = '/users'
+  privilege = 'user'
   columns = columns
   sort = 'email'
 
@@ -129,6 +132,7 @@ export default class UserMain extends mixins(Crud, Modal) {
           text: 'Suspend',
           icon: 'frown',
           event: 'suspend',
+          action: 'U',
         },
       ]
     } else if (user.statusFk === statuses.SUSPENDED) {
@@ -137,6 +141,7 @@ export default class UserMain extends mixins(Crud, Modal) {
           text: 'Activate',
           icon: 'smile',
           event: 'activate',
+          action: 'U',
         },
       ]
     }

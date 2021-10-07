@@ -30,6 +30,7 @@ export default {
     '~/plugins/axios-date',
     '~/plugins/axios-accessor',
     '~/plugins/easy-jwt',
+    '~/plugins/directives/vcan',
   ],
 
   srcDir: 'src/',
@@ -86,7 +87,7 @@ export default {
   },
   //nav guard
   router: {
-    middleware: ['auth'],
+    middleware: ['auth', 'roles'],
   },
 
   server: {
