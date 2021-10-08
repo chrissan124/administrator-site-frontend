@@ -4,8 +4,10 @@
       :handleCancel="handleCancel"
       :visible="visible"
       :title="`Add ${header.title}`"
+      v-if="showCreate"
+      :closable="showCreate.closeIcon"
     >
-      <slot name="form" />
+      <slot :cancel="handleCancel" name="form" />
     </CommonFormModal>
     <div class="header">
       <a-space size="large" align="center">
@@ -25,6 +27,7 @@
           type="primary"
           icon="plus"
           @click="showModal"
+          v-if="showCreate"
           v-can:create="[privilege]"
         >
           ADD
@@ -73,8 +76,16 @@ interface RecycleProps {
 export default class TableLayout extends mixins(Modal) {
   @Prop({ default: 'any' })
   privilege!: string
+
   @Prop({ required: true })
   header!: Header
+
+  @Prop({
+    default: () => ({
+      closeIcon: false,
+    }),
+  })
+  showCreate!: { closeIcon: boolean } | null
 
   @Prop({ default: null })
   selected!: null | Object

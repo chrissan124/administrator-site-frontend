@@ -34,5 +34,9 @@ export default class Form extends Vue {
     })
   }
 
+  handleCancel(){
+    this.$emit('cancel')
+  }
+
 
 }

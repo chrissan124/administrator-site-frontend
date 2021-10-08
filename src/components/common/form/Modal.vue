@@ -3,7 +3,7 @@
     :title="title"
     :visible="visible"
     :centered="true"
-    :closable="false"
+    :closable="closable"
     :destroyOnClose="true"
     :footer="null"
     @cancel="handleCancel"
@@ -25,6 +25,9 @@ export default class FormModal extends Vue {
 
   @Prop({ required: true })
   handleCancel!: Function
+
+  @Prop({ default: false })
+  closable!: boolean
 }
 </script>
 

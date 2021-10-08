@@ -32,7 +32,7 @@
           }}</span>
         </span>
         <span slot="status" slot-scope="status">
-          <a-tag :color="status === 'ACTIVE' ? 'green' : 'red'">
+          <a-tag :color="status | color">
             {{ status }}
           </a-tag>
         </span>

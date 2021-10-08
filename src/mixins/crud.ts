@@ -22,7 +22,7 @@ type GetParams = {
   mapper?:Mapper
 }
 
-type Base = { [x: string]: any; statusFk: any; }
+type Base = { [x: string]: any; statusFk?: any; }
 
 function map<T>(items:Array<T>){
   return items
@@ -45,6 +45,8 @@ export default class Crud<T extends Base> extends Vue {
   selectedRowKeys : Array<String> = []
   rowKey:string = ''
   getParams = {}
+  
+
   async fetch(){
     await this.get({query:{size:this.pagination.pageSize}})
   }

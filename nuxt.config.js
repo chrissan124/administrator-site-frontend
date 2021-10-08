@@ -31,6 +31,7 @@ export default {
     '~/plugins/axios-accessor',
     '~/plugins/easy-jwt',
     '~/plugins/directives/vcan',
+    '~/plugins/filters/statusColor',
   ],
 
   srcDir: 'src/',

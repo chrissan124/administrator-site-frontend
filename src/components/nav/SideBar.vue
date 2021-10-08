@@ -67,9 +67,9 @@ import WindowListener from '../../mixins/windowListener'
 const tabs = [
   { name: 'Home', icon: 'home', route: '/', can: ['free'] },
   { name: 'Clients', icon: 'contacts', route: '/clients', can: ['client'] },
-  { name: 'Contracts', icon: 'bank', route: '/contracts', can: ['contract'] },
+  { name: 'Contracts', icon: 'audit', route: '/contracts', can: ['contract'] },
   { name: 'Products', icon: 'appstore', route: '/products', can: ['product'] },
-  { name: 'Hirings', icon: 'audit', route: '/hirings', can: ['hiring'] },
+  { name: 'Hirings', icon: 'solution', route: '/hirings', can: ['hiring'] },
   { name: 'Users', icon: 'user', route: '/users', can: ['user'] },
   { name: 'Roles', icon: 'team', route: '/roles', can: ['role'] },
   {
