@@ -20,3 +20,8 @@
 .ant-table.ant-table-rtl {
   overflow-x: scroll;
 }
+
+.ant-select-selection--multiple {
+  max-height: 8rem;
+  overflow-y: auto;
+}

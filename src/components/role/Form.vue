@@ -177,9 +177,10 @@ export default class RoleForm extends mixins(Form) {
 .scroll-select {
   overflow-y: auto;
   max-height: 8rem;
-  .ant-select-selection--multiple {
+  .ant-select-selection--multiple,
+  * > {
     overflow-y: auto;
-    max-height: 10rem;
+    max-height: 8rem;
   }
 }
 </style>

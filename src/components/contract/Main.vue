@@ -3,7 +3,7 @@
     <CommonTableLayout
       :selected="selected"
       :privilege="privilege"
-      :header="{ title: 'Clients', icon: 'contacts' }"
+      :header="{ title: propTitle, icon: 'contacts' }"
       :recycleProps="{
         url: this.path,
         id: 'clientId',
@@ -64,7 +64,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, mixins } from 'nuxt-property-decorator'
+import { Component, mixins, Prop } from 'nuxt-property-decorator'
 import Modal from '../../mixins/modal'
 import Crud from '../../mixins/crud'
 import { Client, FlatClient } from '../../types/client'
@@ -117,7 +117,13 @@ const columns = [
 ]
 @Component({})
 export default class ClientMain extends mixins(Crud, Modal) {
-  path = '/clients'
+  @Prop({default:'/contracts'})
+  propPath!:string 
+
+  @Prop({default:'Contracts'})
+  propTitle!:string
+
+  path = this.propPath
   privilege = 'client'
   columns = columns
   sort = 'name'
